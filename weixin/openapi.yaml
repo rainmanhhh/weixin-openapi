@@ -1,0 +1,80 @@
+openapi: 3.0.3
+info:
+  title: Weixin
+  description: Weixin
+  version: 1.0.0
+  contact:
+    name: sfy
+servers:
+  - url: 'https://api.weixin.qq.com'
+    description: prod
+paths:
+  /sns/oauth2/access_token:
+    parameters: []
+    get:
+      summary: 获取openid和access_token
+      operationId: get-openid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetOpenIdRes'
+      description: 走网页授权access_token接口
+      tags:
+        - Weixin
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: appid
+          required: true
+          description: 微信公众号/小程序appid
+        - schema:
+            type: string
+          in: query
+          name: secret
+          description: 私钥
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: code
+          description: 微信小程序登陆时得到的code
+          required: true
+tags:
+  - name: Weixin
+components:
+  schemas:
+    CommonRes:
+      title: CommonRes
+      x-stoplight:
+        id: bgsvlws3hpyk6
+      type: object
+      properties:
+        errcode:
+          type: string
+          description: 错误码
+        errmsg:
+          type: string
+          description: 错误描述
+    GetOpenIdRes:
+      title: GetOpenIdRes
+      x-stoplight:
+        id: ohb74rd3n3wh8
+      allOf:
+        - $ref: '#/components/schemas/CommonRes'
+        - type: object
+          properties:
+            access_token:
+              type: string
+            expires_in:
+              type: integer
+              description: 过期时间，单位秒
+            refresh_token:
+              type: string
+            openid:
+              type: string
+            scope:
+              type: string

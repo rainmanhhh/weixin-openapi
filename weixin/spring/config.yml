@@ -1,0 +1,24 @@
+x-template: true
+apiPackage: ez.weixin.apis
+artifactId: weixin-api
+basePackage: ez.weixin
+bigDecimalAsString: true
+booleanGetterPrefix: true
+configPackage: ez.weixin.config
+dateLibrary: java8
+ensureUniqueParams: false
+groupId: com.github.rainmanhhh
+hideGenerationTimestamp: true
+interfaceOnly: false
+library: spring-cloud
+modelPackage: ez.weixin.models
+serializableModel: true
+serviceInterface: true
+snapshotVersion: true
+title: weixin-server-api
+unhandledException: true
+useTags: true
+virtualService: false
+withXml: true
+
+#modelPropertyNaming: original
