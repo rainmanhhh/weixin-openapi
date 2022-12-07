@@ -201,8 +201,13 @@ components:
           properties:
             session_key:
               type: string
+              description: 会话密钥（可用于获取用户手机号等操作）
             openid:
               type: string
+              description: （小程序）用户唯一标识
+            unionid:
+              type: string
+              description: 用户在开放平台的唯一标识符，若当前小程序已绑定到微信开放平台帐号下会返回
         - $ref: '#/components/schemas/CommonRes'
     GetTicketRes:
       title: GetTicketRes
