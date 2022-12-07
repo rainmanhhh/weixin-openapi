@@ -6,7 +6,7 @@ info:
   contact:
     name: sfy
 servers:
-  - url: https://api.weixin.qq.com
+  - url: 'https://api.weixin.qq.com'
     description: prod
 paths:
   /cgi-bin/ticket/getticket:
@@ -15,12 +15,12 @@ paths:
       tags:
         - Weixin
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GetTicketRes"
+                $ref: '#/components/schemas/GetTicketRes'
       operationId: get-ticket
       description: 根据appToken获取ticket
       parameters:
@@ -42,12 +42,12 @@ paths:
       tags:
         - Weixin
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GetAppTokenRes"
+                $ref: '#/components/schemas/GetAppTokenRes'
       operationId: get-appToken
       description: appToken为全局token，仅用于服务端调用平台接口。每个用户单独的token使用get-userToken获取
       parameters:
@@ -73,14 +73,15 @@ paths:
   /sns/jscode2session:
     get:
       summary: 获取小程序用户sessionKey和openid
-      tags: []
+      tags:
+        - Weixin
       responses:
-        "200":
+        '200':
           description: OK
           content:
             text/plain:
               schema:
-                $ref: "#/components/schemas/GetMpSessionKeyRes"
+                $ref: '#/components/schemas/GetMpSessionKeyRes'
       operationId: get-mp-sessionKey
       parameters:
         - schema:
@@ -114,12 +115,12 @@ paths:
       summary: 获取公众号用户token和openid
       operationId: get-gzhToken
       responses:
-        "200":
+        '200':
           description: OK
           content:
             text/plain:
               schema:
-                $ref: "#/components/schemas/GetGzhTokenRes"
+                $ref: '#/components/schemas/GetGzhTokenRes'
       description: 此接口为每个用户单独获取token。程序全局token用get-appToken获取
       tags:
         - Weixin
@@ -170,13 +171,13 @@ components:
             expires_in:
               type: integer
               description: 有效时间（秒）
-        - $ref: "#/components/schemas/CommonRes"
+        - $ref: '#/components/schemas/CommonRes'
     GetGzhTokenRes:
       title: GetUserTokenRes
       x-stoplight:
         id: ohb74rd3n3wh8
       allOf:
-        - $ref: "#/components/schemas/CommonRes"
+        - $ref: '#/components/schemas/CommonRes'
         - type: object
           properties:
             access_token:
@@ -194,7 +195,7 @@ components:
       title: GetMpSessionKeyRes
       x-stoplight:
         id: g3jqvnnyhoz6s
-      description: ""
+      description: ''
       allOf:
         - type: object
           properties:
@@ -202,13 +203,13 @@ components:
               type: string
             openid:
               type: string
-        - $ref: "#/components/schemas/CommonRes"
+        - $ref: '#/components/schemas/CommonRes'
     GetTicketRes:
       title: GetTicketRes
       x-stoplight:
         id: guvrru59lkbkl
       allOf:
-        - $ref: "#/components/schemas/CommonRes"
+        - $ref: '#/components/schemas/CommonRes'
         - type: object
           properties:
             ticket:
