@@ -6,22 +6,121 @@ info:
   contact:
     name: sfy
 servers:
-  - url: 'https://api.weixin.qq.com'
+  - url: https://api.weixin.qq.com
     description: prod
 paths:
-  /sns/oauth2/access_token:
-    parameters: []
+  /cgi-bin/ticket/getticket:
     get:
-      summary: 获取openid和access_token
-      operationId: get-openid
+      summary: 根据appToken获取ticket
+      tags:
+        - Weixin
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetOpenIdRes'
-      description: 走网页授权access_token接口
+                $ref: "#/components/schemas/GetTicketRes"
+      operationId: get-ticket
+      description: 根据appToken获取ticket
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: access_token
+          description: appToken
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: type
+          description: ticket类型，小程序传jsapi，卡卷和发票接口传wx_card
+          required: true
+  /cgi-bin/token:
+    get:
+      summary: 获取appToken
+      tags:
+        - Weixin
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetAppTokenRes"
+      operationId: get-appToken
+      description: appToken为全局token，仅用于服务端调用平台接口。每个用户单独的token使用get-userToken获取
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: grant_type
+          description: 填写client_credential
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: appid
+          description: appid
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: secret
+          description: 密钥
+          required: true
+    parameters: []
+  /sns/jscode2session:
+    get:
+      summary: 获取小程序用户sessionKey和openid
+      tags: []
+      responses:
+        "200":
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/GetMpSessionKeyRes"
+      operationId: get-mp-sessionKey
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: appid
+          description: 小程序id
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: secret
+          description: 小程序密钥
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: js_code
+          description: 小程序登录得到的code
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: grant_type
+          description: 授权类型，填authorization_code
+          required: true
+      description: 获取小程序sessionKey和openid
+  /sns/oauth2/access_token:
+    parameters: []
+    get:
+      summary: 获取公众号用户token和openid
+      operationId: get-gzhToken
+      responses:
+        "200":
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/GetGzhTokenRes"
+      description: 此接口为每个用户单独获取token。程序全局token用get-appToken获取
       tags:
         - Weixin
       parameters:
@@ -30,7 +129,7 @@ paths:
           in: query
           name: appid
           required: true
-          description: 微信公众号/小程序appid
+          description: 微信公众号appid
         - schema:
             type: string
           in: query
@@ -41,7 +140,7 @@ paths:
             type: string
           in: query
           name: code
-          description: 微信小程序登陆时得到的code
+          description: 公众号登陆时得到的code
           required: true
 tags:
   - name: Weixin
@@ -54,17 +153,30 @@ components:
       type: object
       properties:
         errcode:
-          type: string
+          type: integer
           description: 错误码
         errmsg:
           type: string
           description: 错误描述
-    GetOpenIdRes:
-      title: GetOpenIdRes
+    GetAppTokenRes:
+      title: GetAppTokenRes
+      x-stoplight:
+        id: j4zioqr8qa4gh
+      allOf:
+        - type: object
+          properties:
+            access_token:
+              type: string
+            expires_in:
+              type: integer
+              description: 有效时间（秒）
+        - $ref: "#/components/schemas/CommonRes"
+    GetGzhTokenRes:
+      title: GetUserTokenRes
       x-stoplight:
         id: ohb74rd3n3wh8
       allOf:
-        - $ref: '#/components/schemas/CommonRes'
+        - $ref: "#/components/schemas/CommonRes"
         - type: object
           properties:
             access_token:
@@ -78,3 +190,30 @@ components:
               type: string
             scope:
               type: string
+    GetMpSessionKeyRes:
+      title: GetMpSessionKeyRes
+      x-stoplight:
+        id: g3jqvnnyhoz6s
+      description: ""
+      allOf:
+        - type: object
+          properties:
+            session_key:
+              type: string
+            openid:
+              type: string
+        - $ref: "#/components/schemas/CommonRes"
+    GetTicketRes:
+      title: GetTicketRes
+      x-stoplight:
+        id: guvrru59lkbkl
+      allOf:
+        - $ref: "#/components/schemas/CommonRes"
+        - type: object
+          properties:
+            ticket:
+              type: string
+              description: ticket值
+            expires_in:
+              type: integer
+              description: ticket有效时长，一般为7200秒
