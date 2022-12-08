@@ -108,7 +108,7 @@ paths:
           name: grant_type
           description: 授权类型，填authorization_code
           required: true
-      description: 获取小程序sessionKey和openid
+      description: 注意：此接口contentType为text/plain，调用方若为spring feign体系，需要自定义一个类用于反序列化（继承AbstractJackson2HttpMessageConverter）
   /sns/oauth2/access_token:
     parameters: []
     get:
@@ -121,7 +121,7 @@ paths:
             text/plain:
               schema:
                 $ref: '#/components/schemas/GetGzhTokenRes'
-      description: 此接口为每个用户单独获取token。程序全局token用get-appToken获取
+      description: 注意：此接口contentType为text/plain，调用方若为spring feign体系，需要自定义一个类用于反序列化（继承AbstractJackson2HttpMessageConverter）
       tags:
         - Weixin
       parameters:
