@@ -108,7 +108,7 @@ paths:
           name: grant_type
           description: 授权类型，填authorization_code
           required: true
-      description: 注意：此接口contentType为text/plain，调用方若为spring feign体系，需要自定义一个类用于反序列化（继承AbstractJackson2HttpMessageConverter）
+      description: 注意：此接口contentType为text/plain，调用方若为spring feign体系，需要自定义一个类用于反序列化（继承AbstractJackson2HttpMessageConverter并覆写supports接口）
   /sns/oauth2/access_token:
     parameters: []
     get:
@@ -121,7 +121,7 @@ paths:
             text/plain:
               schema:
                 $ref: '#/components/schemas/GetGzhTokenRes'
-      description: 注意：此接口contentType为text/plain，调用方若为spring feign体系，需要自定义一个类用于反序列化（继承AbstractJackson2HttpMessageConverter）
+      description: 注意：此接口contentType为text/plain，调用方若为spring feign体系，需要自定义一个类用于反序列化（继承AbstractJackson2HttpMessageConverter并覆写supports接口）
       tags:
         - Weixin
       parameters:
