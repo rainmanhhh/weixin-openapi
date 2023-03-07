@@ -1,12 +1,12 @@
 openapi: 3.0.3
 info:
   title: Weixin
-  description: Weixin
+  description: 微信平台接口定义（仅用于生成client代码）
   version: 1.0.0
   contact:
     name: sfy
 servers:
-  - url: 'https://api.weixin.qq.com'
+  - url: https://api.weixin.qq.com
     description: prod
 paths:
   /cgi-bin/ticket/getticket:
@@ -15,12 +15,12 @@ paths:
       tags:
         - Weixin
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetTicketRes'
+                $ref: "#/components/schemas/GetTicketRes"
       operationId: get-ticket
       description: 根据appToken获取ticket
       parameters:
@@ -42,12 +42,12 @@ paths:
       tags:
         - Weixin
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetAppTokenRes'
+                $ref: "#/components/schemas/GetAppTokenRes"
       operationId: get-appToken
       description: appToken为全局token，仅用于服务端调用平台接口。每个用户单独的token使用get-userToken获取
       parameters:
@@ -76,12 +76,12 @@ paths:
       tags:
         - Weixin
       responses:
-        '200':
+        "200":
           description: OK
           content:
             text/plain:
               schema:
-                $ref: '#/components/schemas/GetMpSessionKeyRes'
+                $ref: "#/components/schemas/GetMpSessionKeyRes"
       operationId: get-mp-sessionKey
       parameters:
         - schema:
@@ -108,20 +108,22 @@ paths:
           name: grant_type
           description: 授权类型，填authorization_code
           required: true
-      description: 注意：此接口contentType为text/plain，调用方若为spring feign体系，需要自定义一个类用于反序列化（继承AbstractJackson2HttpMessageConverter并覆写supports接口）
+      description: 注意：此接口contentType为text/plain，调用方若为spring
+        feign体系，需要自定义一个类用于反序列化（继承AbstractJackson2HttpMessageConverter并覆写supports接口）
   /sns/oauth2/access_token:
     parameters: []
     get:
       summary: 获取公众号用户token和openid
       operationId: get-gzhToken
       responses:
-        '200':
+        "200":
           description: OK
           content:
             text/plain:
               schema:
-                $ref: '#/components/schemas/GetGzhTokenRes'
-      description: 注意：此接口contentType为text/plain，调用方若为spring feign体系，需要自定义一个类用于反序列化（继承AbstractJackson2HttpMessageConverter并覆写supports接口）
+                $ref: "#/components/schemas/GetGzhTokenRes"
+      description: 注意：此接口contentType为text/plain，调用方若为spring
+        feign体系，需要自定义一个类用于反序列化（继承AbstractJackson2HttpMessageConverter并覆写supports接口）
       tags:
         - Weixin
       parameters:
@@ -143,6 +145,32 @@ paths:
           name: code
           description: 公众号登陆时得到的code
           required: true
+  /wxa/business/getuserphonenumber:
+    post:
+      summary: 获取手机号
+      operationId: get-phone
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetPhoneRes"
+      tags:
+        - Weixin
+      description: 新版获取手机号接口
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: access_token
+          description: appToken
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetPhoneReq"
 tags:
   - name: Weixin
 components:
@@ -171,13 +199,13 @@ components:
             expires_in:
               type: integer
               description: 有效时间（秒）
-        - $ref: '#/components/schemas/CommonRes'
+        - $ref: "#/components/schemas/CommonRes"
     GetGzhTokenRes:
       title: GetUserTokenRes
       x-stoplight:
         id: ohb74rd3n3wh8
       allOf:
-        - $ref: '#/components/schemas/CommonRes'
+        - $ref: "#/components/schemas/CommonRes"
         - type: object
           properties:
             access_token:
@@ -195,7 +223,7 @@ components:
       title: GetMpSessionKeyRes
       x-stoplight:
         id: g3jqvnnyhoz6s
-      description: ''
+      description: ""
       allOf:
         - type: object
           properties:
@@ -208,13 +236,43 @@ components:
             unionid:
               type: string
               description: 用户在开放平台的唯一标识符，若当前小程序已绑定到微信开放平台帐号下会返回
-        - $ref: '#/components/schemas/CommonRes'
+        - $ref: "#/components/schemas/CommonRes"
+    GetPhoneReq:
+      title: GetPhoneReq
+      x-stoplight:
+        id: 3gkcpemwd0ydr
+      type: object
+      properties:
+        code:
+          type: string
+          description: 获取手机号专用的一次性code
+      required:
+        - code
+    GetPhoneRes:
+      title: GetPhoneRes
+      x-stoplight:
+        id: 6f7md0esio52i
+      allOf:
+        - type: object
+          properties:
+            phoneNumber:
+              type: string
+              description: 用户绑定的手机号（国外手机号会有区号）
+            purePhoneNumber:
+              type: string
+              description: 没有区号的手机号
+            countryCode:
+              type: string
+              description: 区号
+            "":
+              type: string
+        - $ref: "#/components/schemas/CommonRes"
     GetTicketRes:
       title: GetTicketRes
       x-stoplight:
         id: guvrru59lkbkl
       allOf:
-        - $ref: '#/components/schemas/CommonRes'
+        - $ref: "#/components/schemas/CommonRes"
         - type: object
           properties:
             ticket:
