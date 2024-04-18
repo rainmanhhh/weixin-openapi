@@ -264,8 +264,6 @@ components:
             countryCode:
               type: string
               description: 区号
-            "":
-              type: string
         - $ref: "#/components/schemas/CommonRes"
     GetTicketRes:
       title: GetTicketRes
