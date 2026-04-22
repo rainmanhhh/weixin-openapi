@@ -30,6 +30,41 @@ paths:
               $ref: "#/components/schemas/SendSubscribeMessageReq"
       parameters:
         - $ref: "#/components/parameters/access_token"
+  /cgi-bin/stable_token:
+    get:
+      summary: 获取稳定版接口调用凭据appToken
+      tags:
+        - Weixin
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetAppTokenRes"
+      operationId: get-appToken
+      description: >-
+        接口英文名：getStableAccessToken。
+
+        本接口用于获取获取全局唯一后台接口调用凭据（Access Token），token 有效期为 7200 秒，但此接口和
+        getAccessToken 互相隔离，且比其更加稳定，推荐使用此接口替代
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: grant_type
+          description: 填写client_credential
+          required: true
+        - $ref: "#/components/parameters/appid"
+        - $ref: "#/components/parameters/secret"
+        - schema:
+            type: boolean
+          in: query
+          name: force_refresh
+          description: 默认使用 false。1. force_refresh = false 时为普通调用模式，access_token
+            有效期内重复调用该接口不会更新 access_token；2. 当force_refresh = true
+            时为强制刷新模式，会导致上次获取的 access_token 失效，并返回新的 access_token
+    parameters: []
   /cgi-bin/ticket/getticket:
     get:
       summary: 根据appToken获取ticket
@@ -52,30 +87,6 @@ paths:
           name: type
           description: ticket类型，小程序传jsapi，卡卷和发票接口传wx_card
           required: true
-  /cgi-bin/token:
-    get:
-      summary: 获取appToken
-      tags:
-        - Weixin
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GetAppTokenRes"
-      operationId: get-appToken
-      description: appToken为全局token，仅用于服务端调用平台接口。每个用户单独的token使用get-gzhToken（公众号）或get-mp-sessionKey（小程序）获取
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: grant_type
-          description: 填写client_credential
-          required: true
-        - $ref: "#/components/parameters/appid"
-        - $ref: "#/components/parameters/secret"
-    parameters: []
   /sns/jscode2session:
     get:
       summary: 获取小程序用户sessionKey和openid
