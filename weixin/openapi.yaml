@@ -31,7 +31,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/access_token"
   /cgi-bin/stable_token:
-    get:
+    post:
       summary: 获取稳定版接口调用凭据appToken
       tags:
         - Weixin
@@ -48,22 +48,12 @@ paths:
 
         本接口用于获取获取全局唯一后台接口调用凭据（Access Token），token 有效期为 7200 秒，但此接口和
         getAccessToken 互相隔离，且比其更加稳定，推荐使用此接口替代
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: grant_type
-          description: 填写client_credential
-          required: true
-        - $ref: "#/components/parameters/appid"
-        - $ref: "#/components/parameters/secret"
-        - schema:
-            type: boolean
-          in: query
-          name: force_refresh
-          description: 默认使用 false。1. force_refresh = false 时为普通调用模式，access_token
-            有效期内重复调用该接口不会更新 access_token；2. 当force_refresh = true
-            时为强制刷新模式，会导致上次获取的 access_token 失效，并返回新的 access_token
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetAppTokenReq"
     parameters: []
   /cgi-bin/ticket/getticket:
     get:
@@ -179,6 +169,38 @@ components:
         errmsg:
           type: string
           description: 错误描述
+    GetAppTokenReq:
+      title: GetAppTokenReq
+      x-stoplight:
+        id: 12u7byu2d4ynv
+      type: object
+      properties:
+        grant_type:
+          type: string
+          x-stoplight:
+            id: 7dvksyrhchu2c
+          description: 填写client_credential
+        appid:
+          type: string
+          x-stoplight:
+            id: 449hho9l23v2l
+          description: 小程序或公众号id
+        secret:
+          type: string
+          x-stoplight:
+            id: faj7w321em35k
+          description: 唯一凭证密钥，即 AppSecret
+        force_refresh:
+          type: boolean
+          x-stoplight:
+            id: d4mk5e5i3mgno
+          description: 默认使用 false。1. force_refresh = false 时为普通调用模式，access_token
+            有效期内重复调用该接口不会更新 access_token；2. 当force_refresh = true
+            时为强制刷新模式，会导致上次获取的 access_token 失效，并返回新的 access_token
+      required:
+        - grant_type
+        - appid
+        - secret
     GetAppTokenRes:
       title: GetAppTokenRes
       x-stoplight:
